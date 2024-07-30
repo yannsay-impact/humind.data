@@ -1,9 +1,14 @@
-source()
+# First, let's source the compose.R file
+# - it loads needed data
+# - it composes the needed new columns
+source("scripts-example/compose.R")
 
 # Analysis groups ---------------------------------------------------------
 
 # List of grouping variables
-group_vars <- list("admin1", "resp_gender", "hoh_gender", "hoh_age_cat")
+group_vars <- list("admin1", "hoh_gender", "hoh_age_cat")
+# Here you can add in group_vars the variable you want to disaggregate by
+# Following your data disagregation plan, see MSNI guidance for more information
 
 # Add this list of variables to loop (including weights, and stratum if relevant), joining by uuid
 loop <- df_diff(loop, main, uuid) |>
@@ -21,8 +26,7 @@ design_main_w <- main |>
 
 # Design main - unweighted
 design_main_unw <- main |>
-  mutate(weight = 1) |>
-  as_survey_design(weight = weight)
+  as_survey_design()
 
 # Design loop - weighted
 design_loop_w <- loop |>
@@ -30,8 +34,7 @@ design_loop_w <- loop |>
 
 # Design loop - unweighted
 design_loop_unw <- loop |>
-  mutate(weight = 1) |>
-  as_survey_design(weight = weight)
+  as_survey_design()
 
 # Survey
 survey <- survey_update |>
