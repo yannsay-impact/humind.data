@@ -798,5 +798,5 @@ sheetsbinded$nut_ind <- sheetsbinded$nut_ind |> filter(uuid %in% sheetsbinded$ma
 write.xlsx(sheetsbinded, paste0("data-raw/dummy_raw_data.xlsx"), overwrite = T)
 dummy_raw_data <- sheetsbinded
 # library(impactR.utils)
-# dummy_raw_data <- impactR.utils::import_full_xlsx("data-raw/dummy_raw_data.xlsx", clean_names = F)
+dummy_raw_data <- impactR.utils::import_full_xlsx("data-raw/dummy_raw_data.xlsx", clean_names = F)
 usethis::use_data(dummy_raw_data, overwrite = TRUE)
