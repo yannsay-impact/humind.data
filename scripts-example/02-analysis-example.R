@@ -8,7 +8,7 @@ library(srvyr)
 # First, let's source the compose.R file
 # - it loads needed data
 # - it composes the needed new column
-source("scripts-example/compose-example.R")
+source("scripts-example/01-compose-example.R")
 
 # Note that there are warnings that are fixed in v2024.1.1 (see https://github.com/impact-initiatives-hppu/humind/tree/dev2024.1.1)
 
@@ -31,14 +31,14 @@ loop <- df_diff(loop, main, uuid) |>
 # Prepare design and kobo -------------------------------------------------
 
 # Design main - weighted
-design_main_w <- main |>
+design_main <- main |>
   as_survey_design(weight = weight)
 
 # Design loop - weighted
-design_loop_w <- loop |>
+design_loop <- loop |>
   as_survey_design(weight = weight)
 
-# Survey - one column must be named label 
+# Survey - one column must be named label
 # and the type column must be split into type and list_name
 survey <- survey_updated |>
   split_survey(type) |>
@@ -48,71 +48,42 @@ survey <- survey_updated |>
 choices <- choices_updated |>
   rename(label = label_english)
 
-
-
-# Prepare analysis --------------------------------------------------------
-
-# Load list of analysis (example is in humind.data::loa)
-loa_main <- loa |> filter(dataset == "main")
-loa_loop <- loa |> filter(dataset == "loop")
-
 # Run analysis ------------------------------------------------------------
 
-
 # Main analysis - weighted
-if (nrow(loa_main_w) > 0) {
-  an_main_w <- impactR.analysis::kobo_analysis_from_dap_group(
-    design_main_w,
-    loa_main_w,
+if (nrow(loa_main) > 0) {
+  an_main <- impactR.analysis::kobo_analysis_from_dap_group(
+    design_main,
+    loa_main,
     survey,
     choices,
     l_group = group_vars,
     choices_sep = "/")
 } else {
-  an_main_w <- tibble()
-}
-
-# Main analysis - unweighted
-if (nrow(loa_main_unw) > 0) {
-  an_main_unw <- impactR.analysis::kobo_analysis_from_dap_group(
-    design_main_unw,
-    loa_main_unw,
-    survey,
-    choices,
-    l_group = group_vars,
-    choices_sep = "/")
-} else {
-  an_main_unw <- tibble()
-}
-
-# Loop analysis - weighted
-if (nrow(loa_loop_w) > 0) {
-  an_loop_w <- impactR.analysis::kobo_analysis_from_dap_group(
-    design_loop_w,
-    loa_loop_w,
-    survey,
-    choices,
-    l_group = group_vars,
-    choices_sep = "/")
-} else {
-  an_loop_w <- tibble()
-}
-
-# Loop analysis - unweighted
-if (nrow(loa_loop_unw) > 0) {
-  an_loop_unw <- impactR.analysis::kobo_analysis_from_dap(
-    design_loop_unw,
-    loa_loop_unw,
-    survey,
-    choices,
-    l_group = group_vars,
-    choices_sep = "/")
-} else {
-  an_loop_unw <- tibble()
+  an_main <- tibble()
 }
 
 
-# Bind all, view, and save ------------------------------------------------
+# Count missing values ----------------------------------------------------
 
-# Bind all
-an <- bind_rows(an_main_w, an_main_unw, an_loop_w, an_loop_unw)
+# On top of the analysis, required (and good practice to look at missing values).
+# A function in impactR.analysis does that.
+
+# With the below we get the
+na_n <- count_missing_values(
+  df = main,
+  vars = colnames(main)
+)
+tail(na_n, 20)
+
+# For instance, we see that we have 46 missing values for the health score or 19.1%
+# Let's look at the health composite score by gender of the hoh
+na_n_hoh_gender <- count_missing_values(
+  df = main,
+  vars = colnames(main),
+  group = "hoh_gender"
+) |>
+  filter(
+    hoh_gender %in% c("male", "female", "other"),
+    var == "comp_health_score")
+na_n_hoh_gender
