@@ -12,7 +12,7 @@ source("scripts-example/01-compose-example.R")
 
 # Note that there are warnings that are fixed in v2024.1.1 (see https://github.com/impact-initiatives-hppu/humind/tree/dev2024.1.1)
 
-# Loads other needed data
+# Loads other needed data -- explicit call
 data(loa, package = "humind.data")
 data("survey_updated", package = "humind.data")
 data("choices_updated", package = "humind.data")

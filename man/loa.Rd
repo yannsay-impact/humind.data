@@ -3,7 +3,7 @@
 \docType{data}
 \name{loa}
 \alias{loa}
-\title{Some analysis DAP}
+\title{Some list of analysis}
 \format{
 A tibble
 }
@@ -11,6 +11,6 @@ A tibble
 loa
 }
 \description{
-Some analysis DAP
+Some list of analysis
 }
 \keyword{datasets}

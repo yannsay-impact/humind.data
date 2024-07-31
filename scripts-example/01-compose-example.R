@@ -38,7 +38,7 @@ loop <- loop |>
   # Demographics
   add_age_cat("ind_age", breaks = c(-1, 17, 59, 120)) |>
   add_age_18_cat("ind_age") |>
-  # # Education
+  # Education
   add_loop_edu_ind_age_corrected(main = main, month = 7) |>
   add_loop_edu_access_d() |>
   add_loop_edu_barrier_protection_d() |>
