@@ -25,7 +25,7 @@ choices_updated <- bind_rows(
   )
 )
 
-loa <- loa$loa_v1
+loa <- loa$loa
 
 usethis::use_data(loa, overwrite = TRUE)
 usethis::use_data(survey_updated, overwrite = TRUE)

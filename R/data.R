@@ -4,7 +4,7 @@
 #' @format A list of tibbles
 "dummy_raw_data"
 
-#' Some analysis DAP
+#' Some list of analysis
 #'
 #' @format A tibble
 "loa"

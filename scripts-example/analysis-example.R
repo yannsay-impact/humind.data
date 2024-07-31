@@ -1,7 +1,16 @@
+# Load libraries
+# pak::pak("gnoblet/impactR.kobo")
+library(impactR.kobo)
+# pak::pak("impact-initiatives-hppu/humind")
+library(impactR.analysis)
+library(srvyr)
+
 # First, let's source the compose.R file
 # - it loads needed data
-# - it composes the needed new columns
-source("scripts-example/compose.R")
+# - it composes the needed new column
+source("scripts-example/compose-example.R")
+
+# Note that there are warnings that are fixed in v2024.1.1 (see https://github.com/impact-initiatives-hppu/humind/tree/dev2024.1.1)
 
 # Analysis groups ---------------------------------------------------------
 
@@ -11,6 +20,7 @@ group_vars <- list("admin1", "hoh_gender", "hoh_age_cat")
 # Following your data disagregation plan, see MSNI guidance for more information
 
 # Add this list of variables to loop (including weights, and stratum if relevant), joining by uuid
+# and removing columns existing in both
 loop <- df_diff(loop, main, uuid) |>
   left_join(
     main |> select(uuid, weight, !!!unlist(group_vars)),
@@ -24,42 +34,27 @@ loop <- df_diff(loop, main, uuid) |>
 design_main_w <- main |>
   as_survey_design(weight = weight)
 
-# Design main - unweighted
-design_main_unw <- main |>
-  as_survey_design()
-
 # Design loop - weighted
 design_loop_w <- loop |>
   as_survey_design(weight = weight)
 
-# Design loop - unweighted
-design_loop_unw <- loop |>
-  as_survey_design()
-
-# Survey
-survey <- survey_update |>
+# Survey - one column must be named label 
+# and the type column must be split into type and list_name
+survey <- survey_updated |>
   split_survey(type) |>
   rename(label = label_english)
 
-# Choices
-choices <- choices_update |>
+# Choices - one column must be named label
+choices <- choices_updated |>
   rename(label = label_english)
 
 
 
 # Prepare analysis --------------------------------------------------------
 
-# Bind var_denom when ratio with a ","
-loa <- unite(loa, var, var, var_denom, sep = ",", na.rm = TRUE)
-
+# Load list of analysis (example is in humind.data::loa)
 loa_main <- loa |> filter(dataset == "main")
 loa_loop <- loa |> filter(dataset == "loop")
-loa_main_unw <- loa_main |> filter(weighted == "no")
-loa_loop_unw <- loa_loop |> filter(weighted == "no")
-loa_main_w <- loa_main |> filter(weighted == "yes")
-loa_loop_w <- loa_loop |> filter(weighted == "yes")
-
-
 
 # Run analysis ------------------------------------------------------------
 
