@@ -12,6 +12,7 @@ library(humind)
 # Loading example data
 # pak::pak("impact-initiatives-hppu/humind.data")
 library(humind.data)
+data(dummy_raw_data)
 
 # Needed tidyverse packages
 library(dplyr)
