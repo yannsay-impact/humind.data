@@ -136,8 +136,22 @@ main <- main |>
     # Note that in the initial kobo template the utilities column was:
     # cm_expenditure_frequent_utilitues
     # Spelling mistake
+    "cm_expenditure_frequent_food",
+    "cm_expenditure_frequent_rent",
+    "cm_expenditure_frequent_water",
+    "cm_expenditure_frequent_nfi",
+    "cm_expenditure_frequent_utilities",
+    "cm_expenditure_frequent_fuel",
+    "cm_expenditure_frequent_transportation",
+    "cm_expenditure_frequent_communication",
+    "cm_expenditure_frequent_other"
+  ) |> 
+  add_expenditure_type_freq_rank(
+    # Note that in the initial kobo template the utilities column was:
+    # cm_expenditure_frequent_utilitues
+    # Spelling mistake
     expenditure_freq_types = c(
-      "cm_expenditure_frequent_food",
+    "cm_expenditure_frequent_food",
       "cm_expenditure_frequent_rent",
       "cm_expenditure_frequent_water",
       "cm_expenditure_frequent_nfi",
@@ -147,7 +161,6 @@ main <- main |>
       "cm_expenditure_frequent_communication",
       "cm_expenditure_frequent_other")
   ) |> 
-  add_expenditure_type_freq_rank() |> 
   add_expenditure_type_zero_infreq() |> 
   add_expenditure_type_prop_infreq() |> 
   add_expenditure_type_infreq_rank() |>
