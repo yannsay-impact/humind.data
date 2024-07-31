@@ -12,6 +12,11 @@ source("scripts-example/01-compose-example.R")
 
 # Note that there are warnings that are fixed in v2024.1.1 (see https://github.com/impact-initiatives-hppu/humind/tree/dev2024.1.1)
 
+# Loads other needed data
+data(loa, package = "humind.data")
+data("survey_updated", package = "humind.data")
+data("choices_updated", package = "humind.data")
+
 # Analysis groups ---------------------------------------------------------
 
 # List of grouping variables
@@ -34,10 +39,6 @@ loop <- df_diff(loop, main, uuid) |>
 design_main <- main |>
   as_survey_design(weight = weight)
 
-# Design loop - weighted
-design_loop <- loop |>
-  as_survey_design(weight = weight)
-
 # Survey - one column must be named label
 # and the type column must be split into type and list_name
 survey <- survey_updated |>
@@ -48,13 +49,17 @@ survey <- survey_updated |>
 choices <- choices_updated |>
   rename(label = label_english)
 
+# Loa for main only
+loa <- loa |>
+  filter(level == "main")
+
 # Run analysis ------------------------------------------------------------
 
 # Main analysis - weighted
-if (nrow(loa_main) > 0) {
+if (nrow(loa) > 0) {
   an_main <- impactR.analysis::kobo_analysis_from_dap_group(
     design_main,
-    loa_main,
+    loa,
     survey,
     choices,
     l_group = group_vars,
