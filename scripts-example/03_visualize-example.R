@@ -45,8 +45,24 @@ an_main |>
     x = "group_key_value",
     y = "stat",
     group = "var_value",
-    title = "Metric 3 - % of households by shelter composite score, by age category of the HoH",
+    title = "% of households by shelter composite score, by age category of the HoH",
     palette = "quant_5_red",
+    reverse_guide = F
+  )
+
+# Now do it by category of the HoH and by shelter composite score
+an_main |>
+  filter(
+    group_key == "hoh_age_cat",
+    var == "comp_snfi_score"
+  ) |>
+  mutate(stat = round(stat * 100, 1)) |>
+  bar(
+    x = "var_value",
+    y = "stat",
+    group = "group_key_value",
+    title = "% of households by shelter composite score, by age category of the HoH",
+    palette = "cat_5_custom_1",
     reverse_guide = F
   )
 
