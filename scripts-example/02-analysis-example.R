@@ -14,8 +14,8 @@ source("scripts-example/01-compose-example.R")
 
 # Loads other needed data -- explicit call
 data(loa, package = "humind.data")
-data("survey_updated", package = "humind.data")
-data("choices_updated", package = "humind.data")
+data(survey_updated, package = "humind.data")
+data(choices_updated, package = "humind.data")
 
 # Analysis groups ---------------------------------------------------------
 
